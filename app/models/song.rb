@@ -19,17 +19,17 @@ class Song < ActiveRecord::Base
     self.genre.name if self.genre
   end
 
-  def note_contents=(notes)
-    notes.each do |note|
-      self.notes.build(content: note, song_id: self.id) unless note.blank?
+  def note_contents=(content)
+    content.each do |content|
+      self.notes << Note.find_or_create_by(content: content)
     end
   end
 
   def note_contents
-    note_contents = []
+    ret = []
     self.notes.each do |note|
-      note_contents << note.content
+      ret << note.content unless note.content.empty?
     end
-    note_contents
+    ret
   end
 end
